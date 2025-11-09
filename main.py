@@ -10,20 +10,26 @@ text - 输入的字符串
 list - 按字符频率降序排列的字符列表
 """  
     # 在此处增加代码
-    # 创建字典来存储字符频率
+    # 创建字典来存储字符频率（不区分大小写）
     char_count = {}
     
-    # 统计每个字符的出现次数
+    # 统计每个字符的出现次数（不区分大小写）
     for char in text:
-        # 只统计字母字符（可根据需求调整）
+        # 只统计字母字符（包括中文）
         if char.isalpha():
-            char_count[char] = char_count.get(char, 0) + 1
+            # 将英文字母转换为小写，中文字符保持不变
+            if char.isascii() and char.isalpha():
+                char_key = char.lower()
+            else:
+                char_key = char
+            char_count[char_key] = char_count.get(char_key, 0) + 1
     
     # 如果没有找到任何字母字符
     if not char_count:
         return []
     
     # 按频率降序排序，频率相同则按字符升序排列
+    # 使用元组排序：先按频率降序(-count)，再按字符升序(char)
     sorted_chars = sorted(char_count.items(), 
                          key=lambda x: (-x[1], x[0]))
     
@@ -66,13 +72,17 @@ if __name__ == "__main__":
             print("\n详细分析:")
             print("=" * 30)
             
-            # 重新统计以显示频率
+            # 重新统计以显示频率（不区分大小写）
             char_count = {}
             for char in text:
                 if char.isalpha():
-                    char_count[char] = char_count.get(char, 0) + 1
+                    if char.isascii() and char.isalpha():
+                        char_key = char.lower()
+                    else:
+                        char_key = char
+                    char_count[char_key] = char_count.get(char_key, 0) + 1
             
-            # 按频率降序显示
+            # 按频率降序显示，频率相同按字符升序
             sorted_details = sorted(char_count.items(), 
                                    key=lambda x: (-x[1], x[0]))
             
